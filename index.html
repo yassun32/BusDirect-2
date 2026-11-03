@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusDirect - Réservation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="js/main-trajets.js" defer></script>
+</head>
+
+<body class="bg-blue-50 min-h-screen flex flex-col">
+
+    <header class="bg-white p-4 shadow flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <img src="img/bus.png " alt="bus icon">
+            <span class="bg-blue-700 text-white p-2 rounded">BusDirect</span>
+        </div>
+        <nav>
+            <ul class="flex gap-4 items-center">
+                <li class="text-blue-700 font-semibold">Réservation</li>
+                <li><a href="#tickets.html" class="text-black-600">Tickets</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="bg-slate-50 p-6">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <span class="text-blue-600 text-xs font-bold">EXPLOITATION / RÉSEAU MAROC</span>
+                <h1 class="text-3xl font-bold text-slate-800 mt-2">Tableau des trajets</h1>
+                <p class="text-slate-500 mt-2">Suivez vos départs et gérez chaque cabine en un seul endroit.</p>
+            </div>
+            <p class="text-sm text-slate-500">Mercredi 28 octobre 2026</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+            <article class="bg-white border rounded-xl p-5">
+                <p class="text-sm text-slate-500">Chiffre d'affaires total</p>
+                <h2 id ="recette" class="text-3xl font-bold mt-2">11 340 DH</h2>
+                <p class="text-xs text-slate-500 mt-2">Montant des réservations confirmées</p>
+            </article>
+            <article class="bg-white border rounded-xl p-5">
+                <p class="text-sm text-slate-500">Total passagers</p>
+                <h2 id="totalPassagers" class="text-3xl font-bold mt-2">86</h2>
+                <p class="text-xs text-slate-500 mt-2">400 places au total </p>
+            </article>
+            <article class="bg-blue-950 text-white rounded-xl p-5">
+                <p class="text-sm text-blue-200">Le réseau aujourd'hui</p>
+                <h2 class="text-3xl font-bold mt-2">6 départs</h2>
+                <p class="text-xs text-blue-200 mt-2">4 disponibles · 2 complets</p>
+            </article>
+        </div>
+
+        <form class="bg-white border rounded-xl p-5 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="md:col-span-3">
+                <label class="block text-sm font-semibold mb-2">Rechercher un trajet</label>
+                <input type="text" placeholder="Ville de départ ou d'arrivée..."
+                    class="w-full border rounded-lg p-3 outline-none focus:border-blue-500">
+            </div>
+            <div>
+                <label class="block text-sm font-semibold mb-2">Statut</label>
+                <select class="w-full border rounded-lg p-3 bg-white">
+                    <option>Tous</option>
+                    <option>Disponible</option>
+                    <option>Complet</option>
+                </select>
+            </div>
+        </form>
+    </section>
+    <article id="listeTrajets" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    </article>
+    <aside>
+        <h3 class="font-bold text-lg mt-6 flex justify-center">Liste des trajets</h3>
+        <div class="flex justify-center mt-4 gap-2">
+            <a href="#cabine.html"
+                class="text-blue-700 border border-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">1</a>
+            <a href="#cabine.html"
+                class="text-blue-700 border border-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">2</a>
+        </div>
+    </aside>
+    <footer class="bg-white p-4 mt-auto shadow text-center">
+        <p class="text-sm text-slate-500">&copy; 2026 BusDirect et Tous droits réservés.</p>
+    </footer>

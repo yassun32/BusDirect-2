@@ -1,4 +1,4 @@
-export async function chargerTrajets() {
+export async function trips() {
     const response = await fetch("./data/trips.json");
     const trips = await response.json();
 
@@ -12,9 +12,9 @@ export async function initialiser() {
         return JSON.parse(donnees);
     }
 
-    const trips = await chargerTrajets();
+    const tripsData = await trips();
 
-    localStorage.setItem("trips", JSON.stringify(trips));
+    localStorage.setItem("trips", JSON.stringify(tripsData));
 
-    return trips;
+    return tripsData;
 }

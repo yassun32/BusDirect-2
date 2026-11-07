@@ -54,12 +54,12 @@
         <form class="bg-white border rounded-xl p-5 grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="md:col-span-3">
                 <label class="block text-sm font-semibold mb-2">Rechercher un trajet</label>
-                <input type="text" placeholder="Ville de départ ou d'arrivée..."
+                <input id="ville" type="text" placeholder="Ville de départ ou d'arrivée..."
                     class="w-full border rounded-lg p-3 outline-none focus:border-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-semibold mb-2">Statut</label>
-                <select class="w-full border rounded-lg p-3 bg-white">
+                <select id="filter" class="w-full border rounded-lg p-3 bg-white">
                     <option>Tous</option>
                     <option>Disponible</option>
                     <option>Complet</option>
@@ -68,10 +68,10 @@
         </form>
     </section>
     <article id="listeTrajets" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <h3 class="font-bold text-lg mt-6 flex justify-center">Liste des trajets</h3>   
     </article>
     <aside>
-        <h3 class="font-bold text-lg mt-6 flex justify-center">Liste des trajets</h3>
-        <div class="flex justify-center mt-4 gap-2">
+        <div id="pagination" class="flex justify-center mt-4 gap-2">
             <a href="#cabine.html"
                 class="text-blue-700 border border-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">1</a>
             <a href="#cabine.html"

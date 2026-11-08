@@ -18,3 +18,6 @@ export async function initialiser() {
 
     return tripsData;
 }
+export function sauvegarder(trips) {
+    localStorage.setItem("trips", JSON.stringify(trips));
+}

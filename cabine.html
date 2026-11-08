@@ -172,6 +172,7 @@
                     <section class="bg-white p-6 rounded-lg shadow">
                         <h2 class="font-bold text-black-800 mb-4 pb-2 border-b">Réserver une place</h2>
                         <form id="ajout" class="flex flex-col gap-4">
+                            <fieldset id="reservationFields" class="flex flex-col gap-4"></fieldset>
 
                             <div>
                                 <label class="block text-sm text-black-600 mb-1">Passager</label>
@@ -255,7 +256,25 @@
                             </div>
                         </form>
                     </section>
+                    <section class="bg-white p-6 rounded-lg shadow">
+                        <form id="attente" class="flex flex-col gap-4" hidden>
+                            <h3 class="font-semibold text-orange-600">
+                                Liste d'attente
+                            </h3>
+                            <input id="nomAttente" type="text" placeholder="Nom du passager"
+                                class="w-full border rounded p-2 text-sm bg-black-50">
+                            <p id="erreurNomAttente" class="text-red-600 text-sm"></p>
+                            <input id="telephoneAttente" type="tel" placeholder="Téléphone"
+                                class="w-full border rounded p-2 text-sm bg-black-50">
 
+                            <p id="erreurTelephoneAttente" class="text-red-600 text-sm"></p>
+                            <button type="submit"
+                                class="bg-orange-600 text-white px-4 py-2 rounded text-sm font-semibold">
+                                Rejoindre la liste d'attente
+                            </button>
+                        </form>
+                        <div id="listeAttente" class="mt-4 flex flex-col gap-3"></div>
+                    </section>
                 </aside>
             </div>
         </main>

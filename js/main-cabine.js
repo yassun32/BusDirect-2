@@ -3,7 +3,7 @@ import { estVIP, prixSiege } from "./reservations.js";
 import { validerNom, validerTelephone, validerTelephoneExiste } from "./validators.js";
 
 const trips = await initialiser()
-const id = Number(new URLSearchParams(location.search).get("id"))
+const id = Number(new URLSearchParams(location.search).get("id"));
 const trajet = trips.find(trip => trip.id === id)
 
 if (!trajet) {
@@ -89,22 +89,48 @@ if (!trajet) {
             </p>
         `;
         }
+        const choix = document.getElementById("choix");
         const choixSupp = document.getElementById("choixSupp");
+
         choix.innerHTML = `<option value="">-- Choisir passager --</option>`;
         choixSupp.innerHTML = `<option value="">-- Choisir passager --</option>`;
-        trajet.reservations.forEach(function (reservation) {
-            choix.innerHTML += `
-        <option value="${reservation.seat}">
-            ${reservation.name}
-        </option>
-    `;
 
-            choixSupp.innerHTML += `
+        trajet.reservations.forEach(function (reservation) {
+            const option = `
         <option value="${reservation.seat}">
             ${reservation.name}
-        </option>
-    `;
+        </option>`;
+
+            choix.innerHTML += option;
+            choixSupp.innerHTML += option;
         });
+        if (!trajet.waitingList) {
+            trajet.waitingList = [];
+        }
+        const formulaireAttente = document.getElementById("attente");
+        const reservationFields = document.getElementById("reservationFields");
+
+        if (placesLibres === 0) {
+            reservationFields.disabled = true;
+            formulaireAttente.hidden = false;
+        } else {
+            reservationFields.disabled = false;
+            formulaireAttente.hidden = true;
+        }
+        const listeAttente = document.getElementById("listeAttente");
+
+        listeAttente.innerHTML = trajet.waitingList.map((passager, index) => {
+            return `
+        <div class="flex justify-between items-center border p-3 rounded">
+            <p>${index + 1}. ${passager.name}</p>
+            <button 
+                class="bg-red-100 text-red-600 px-3 py-1 rounded"
+                data-index="${index}">
+                Retirer
+            </button>
+        </div>
+    `;
+        }).join("");
     }
     afficherDonnees();
 
@@ -246,21 +272,79 @@ if (!trajet) {
         }, 3000);
     });
     const supprition = document.getElementById("supprition");
+
     supprition.addEventListener("submit", function (event) {
         event.preventDefault();
+
         const siegeSupp = Number(document.getElementById("choixSupp").value);
-        if (!siegeSupp) {
-            return;
-        }
+        if (!siegeSupp) return;
+
         trajet.reservations = trajet.reservations.filter(function (reservation) {
             return reservation.seat !== siegeSupp;
         });
+
+        const message = document.getElementById("message");
+
+        if (trajet.waitingList.length > 0) {
+            const [premier, ...reste] = trajet.waitingList;
+
+            premier.seat = siegeSupp;
+            trajet.reservations = [...trajet.reservations, premier];
+            trajet.waitingList = reste;
+
+            message.textContent = `${premier.name} a obtenu le siège ${String(siegeSupp).padStart(2, "0")}`;
+        } else {
+            message.textContent = "Réservation annulée avec succès.";
+        }
         sauvegarder(trips);
         afficherDonnees();
-        const message = document.getElementById("message");
-        message.textContent = "Réservation annulée avec succès.";
         setTimeout(() => {
             message.textContent = "";
         }, 3000);
+    });
+    const formAttente = document.getElementById("attente");
+
+    formAttente.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const nom = document.getElementById("nomAttente").value;
+        const telephone = document.getElementById("telephoneAttente").value;
+        const erreurNom = validerNom(
+            nom,
+            [...trajet.reservations, ...trajet.waitingList]
+        );
+        document.getElementById("erreurNomAttente").textContent = erreurNom;
+        if (erreurNom) return;
+        const erreurTelephone = validerTelephone(telephone);
+        document.getElementById("erreurTelephoneAttente").textContent = erreurTelephone;
+        if (erreurTelephone) return;
+        const erreurTelephoneExiste = validerTelephoneExiste(telephone, trajet);
+        document.getElementById("erreurTelephoneAttente").textContent = erreurTelephoneExiste;
+        if (erreurTelephoneExiste) return;
+        const nouveauPassager = {
+            name: nom,
+            phone: telephone
+        };
+        trajet.waitingList = [...trajet.waitingList, nouveauPassager];
+        sauvegarder(trips);
+        afficherDonnees();
+        formAttente.reset();
+    });
+    const listeAttente = document.getElementById("listeAttente");
+
+    listeAttente.addEventListener("click", function (event) {
+
+        const bouton = event.target.closest("button");
+
+        if (bouton) {
+            const index = Number(bouton.dataset.index);
+
+            trajet.waitingList = trajet.waitingList.filter(
+                (passager, i) => i !== index
+            );
+
+            sauvegarder(trips);
+            afficherDonnees();
+        }
     });
 }

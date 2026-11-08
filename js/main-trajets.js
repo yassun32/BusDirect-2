@@ -22,6 +22,16 @@ async function afficher() {
 
 const ville = document.getElementById("ville");
 const filter = document.getElementById("filter");
+const listeTrajets = document.getElementById("listeTrajets");
+
+listeTrajets.addEventListener("click", function (event) {
+    const cabine = event.target.closest("article");
+
+    if (cabine && cabine.dataset.id) {
+        const id = cabine.dataset.id;
+        window.location.href = `cabine.html?id=${id}`;
+    }
+});
 
 ville.addEventListener("input", handleFilter);
 filter.addEventListener("change", handleFilter);

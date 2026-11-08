@@ -20,8 +20,7 @@ export function renderTrajet(trip) {
   const statut = complet ? "Complet" : "Disponible";
 
   return `
-        <article class="m-6 bg-white rounded-xl border p-5 shadow-sm">
-
+        <article data-id="${trip.id}" class="m-6 bg-white rounded-xl border p-5 shadow-sm cursor-pointer hover:shadow-lg">
             <div class="flex justify-between items-center mb-5">
                 <h2 class="font-bold text-lg">BusDirect</h2>
 

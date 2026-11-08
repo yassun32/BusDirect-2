@@ -1,4 +1,4 @@
-export function validerNom(nom, reservations) {
+export function validerNom(nom, reservations, siegeActuel = null) {
 
     if (nom.trim() === "") {
         return "Le nom du passager est obligatoire.";
@@ -6,6 +6,7 @@ export function validerNom(nom, reservations) {
 
     const existe = reservations.some(reservation =>
         reservation.name.toLowerCase() === nom.trim().toLowerCase()
+        && reservation.seat !== siegeActuel
     );
 
     if (existe) {
@@ -22,10 +23,10 @@ export function validerTelephone(telephone) {
 
     return "";
 }
-export function validerTelephoneExiste(telephone, trip) {
-
+export function validerTelephoneExiste(telephone, trip, siegeActuel = null) {
     const existeReservation = trip.reservations.some(reservation =>
-        reservation.phone === telephone
+        reservation.phone === telephone &&
+        reservation.seat !== siegeActuel
     );
 
     const existeWaiting = trip.waitingList.some(personne =>

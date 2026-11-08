@@ -10,7 +10,7 @@ if (!trajet) {
     document.querySelector("#cabine").textContent = "Trajet introuvable"
 } else {
     const info = document.getElementById("infoTrajet")
-
+    const choix = document.getElementById("choix");
     info.innerHTML = `
         <span class="font-bold">${trajet.departure} -> ${trajet.destination}</span>
         <span>${trajet.price} DH / place</span>
@@ -89,6 +89,22 @@ if (!trajet) {
             </p>
         `;
         }
+        const choixSupp = document.getElementById("choixSupp");
+        choix.innerHTML = `<option value="">-- Choisir passager --</option>`;
+        choixSupp.innerHTML = `<option value="">-- Choisir passager --</option>`;
+        trajet.reservations.forEach(function (reservation) {
+            choix.innerHTML += `
+        <option value="${reservation.seat}">
+            ${reservation.name}
+        </option>
+    `;
+
+            choixSupp.innerHTML += `
+        <option value="${reservation.seat}">
+            ${reservation.name}
+        </option>
+    `;
+        });
     }
     afficherDonnees();
 
@@ -152,4 +168,99 @@ if (!trajet) {
             message.textContent = "";
         }, 3000);
     })
+
+    choix.addEventListener("change", function () {
+        const reservation = trajet.reservations.find(function (r) {
+            return r.seat === Number(choix.value);
+        });
+
+        if (!reservation) {
+            return;
+        }
+
+        document.getElementById("nvnome").value = reservation.name;
+        document.getElementById("nvtelephone").value = reservation.phone;
+
+        const choixSiege = document.getElementById("siege");
+
+        choixSiege.innerHTML = `
+        <option value="">-- Garder même siège --</option>
+    `;
+
+        for (let i = 1; i <= trajet.capacity; i++) {
+
+            const occupe = trajet.reservations.some(function (reservation) {
+                return reservation.seat === i;
+            });
+
+            if (occupe === false || i === reservation.seat) {
+                choixSiege.innerHTML += `
+            <option value="${i}">Siège ${i}</option>
+        `;
+            }
+        }
+    });
+    const modification = document.getElementById("modification");
+
+
+    modification.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const siegeActuel = Number(choix.value);
+        const nom = document.getElementById("nvnome").value;
+        const telephone = document.getElementById("nvtelephone").value;
+        const siege = Number(document.getElementById("siege").value);
+        if (!choix.value) {
+            return;
+        }
+        console.log("siegeActuel:", siegeActuel);
+        console.log("telephone:", telephone);
+        console.log("reservations:", trajet.reservations);
+        const erreurNom = validerNom(nom, trajet.reservations, siegeActuel);
+        const erreurTelephone = validerTelephone(telephone);
+        const erreurTelephoneExiste = validerTelephoneExiste(telephone, trajet, siegeActuel);
+        if (erreurNom || erreurTelephone || erreurTelephoneExiste) {
+            document.getElementById("message").textContent =
+                erreurNom || erreurTelephone || erreurTelephoneExiste;
+
+            return;
+        }
+        const nouveauSiege = siege || siegeActuel;
+        trajet.reservations = trajet.reservations.map(function (seulReservation) {
+            if (seulReservation.seat === siegeActuel) {
+                return {
+                    ...seulReservation,
+                    name: nom,
+                    phone: telephone,
+                    seat: nouveauSiege
+                };
+            }
+            return seulReservation;
+        });
+        sauvegarder(trips);
+        afficherDonnees();
+        const message = document.getElementById("message");
+        message.textContent = "Modification effectuée avec succès.";
+        setTimeout(() => {
+            message.textContent = "";
+        }, 3000);
+    });
+    const supprition = document.getElementById("supprition");
+    supprition.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const siegeSupp = Number(document.getElementById("choixSupp").value);
+        if (!siegeSupp) {
+            return;
+        }
+        trajet.reservations = trajet.reservations.filter(function (reservation) {
+            return reservation.seat !== siegeSupp;
+        });
+        sauvegarder(trips);
+        afficherDonnees();
+        const message = document.getElementById("message");
+        message.textContent = "Réservation annulée avec succès.";
+        setTimeout(() => {
+            message.textContent = "";
+        }, 3000);
+    });
 }

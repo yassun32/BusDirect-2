@@ -8,7 +8,6 @@ const trajet = trips.find(trip => trip.id === id);
 if (!trajet) {
     document.querySelector("#cabine").textContent = "Trajet introuvable";
 } else {
-
     const placesLibres = trajet.capacity - trajet.reservations.length;
     const recette = trajet.reservations.reduce((total, reservation) => {
     return total + prixSiege(trajet.price, reservation.seat);
